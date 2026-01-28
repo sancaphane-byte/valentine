@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Un petit jeu pour toi 💘</title>
+  <style>
+    :root { --bg:#0b0b10; --card:#12121a; --text:#f3f3f7; --muted:#b8b8c7; --accent:#ff4d7d; --ok:#4dffb5; }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 20% 10%, #2a1230 0%, transparent 55%),
+                  radial-gradient(900px 600px at 80% 20%, #0f2a3a 0%, transparent 55%),
+                  var(--bg);
+      color:var(--text); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+    }
+    .wrap{width:min(720px, 100%)}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      backdrop-filter: blur(8px);
+    }
+    .top{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:10px;}
+    .badge{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted);}
+    h1{margin:6px 0 2px; font-size:24px}
+    p{margin:10px 0; color:var(--muted); line-height:1.5}
+    .stepTitle{font-size:16px; color:var(--text); margin:14px 0 6px}
+    .progress{
+      height:8px; border-radius:999px; background: rgba(255,255,255,.08); overflow:hidden; margin:14px 0 8px;
+    }
+    .bar{height:100%; width:0%; background: linear-gradient(90deg, var(--accent), #ffb84d); border-radius:999px; transition:width .35s ease;}
+    .row{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
+    input, textarea{
+      width:100%; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10);
+      color:var(--text); border-radius:12px; padding:12px 12px; outline:none;
+      font-size:15px;
+    }
+    textarea{min-height:90px; resize:vertical}
+    button{
+      appearance:none; border:0; border-radius:12px; padding:12px 14px;
+      color:#0b0b10; background: var(--accent); font-weight:700; cursor:pointer;
+      transition: transform .08s ease, filter .2s ease;
+    }
+    button:hover{filter:brightness(1.08)}
+    button:active{transform: translateY(1px)}
+    .ghost{
+      background: transparent; color: var(--text);
+      border:1px solid rgba(255,255,255,.14);
+      font-weight:650;
+    }
+    .yes{background: var(--ok)}
+    .small{font-size:12px; color:rgba(255,255,255,.55); margin-top:10px}
+    .divider{height:1px; background:rgba(255,255,255,.08); margin:16px 0}
+    .hearts{ position:fixed; inset:0; pointer-events:none; overflow:hidden; }
+    .heart{
+      position:absolute; bottom:-40px; font-size:18px; opacity:.0;
+      animation: floatUp 2.8s linear infinite;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.4));
+    }
+    @keyframes floatUp{
+      0%{transform: translateY(0) scale(.9); opacity:0}
+      10%{opacity:.9}
+      100%{transform: translateY(-110vh) scale(1.2); opacity:0}
+    }
+    .final{text-align:center;}
+    .final h2{margin:6px 0 0; font-size:26px}
+    .final .big{font-size:18px; color:var(--text); margin-top:10px}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="top">
+        <div>
+          <div class="badge">Jeu de piste • pour Amy</div>
+          <h1>Mon bébé d’amour… j’ai un petit truc pour toi 💘</h1>
+        </div>
+        <div class="badge" id="counter">Étape 1 / 5</div>
+      </div>
+
+      <div class="progress"><div class="bar" id="bar"></div></div>
+
+      <div id="content"></div>
+
+      <div class="divider"></div>
+
+      <div class="row">
+        <button class="ghost" id="backBtn" type="button">Retour</button>
+        <button id="nextBtn" type="button">Continuer</button>
+      </div>
+
+      <div class="small" id="hint">Astuce : lis lentement. Je suis derrière chaque mot. ✨</div>
+    </div>
+  </div>
+
+  <script>
+    // ✅ Personnalisation
+    const CONFIG = {
+      herName: "Amy (mon bébé d’amour)",
+      yourName: "Eric (Chouuu)",
+      finalLine: "Amy… est-ce que tu veux être ma Valentine ?",
+      yesResponse: "AAAAH OUI 😭💞 Viens, je te prends dans mes bras. — Chouuu",
+      noResponse: "Ok… mais je t’aime quand même fort. (Et je retente demain 😌💘) — Chouuu"
+    };
+
+    const steps = [
+      {
+        title: "Avant de commencer",
+        body: `
+          <p>Salut <b>${CONFIG.herName}</b> 🙂</p>
+          <p>J’ai préparé un petit jeu rien que pour toi.</p>
+          <p><b>Règle :</b> avance étape par étape. Réponds sincèrement, sans te presser.</p>
+          <p class="small">Quand tu es prête, clique sur <b>Continuer</b>.</p>
+        `,
+        input: null
+      },
+      {
+        title: "Étape 1 — Le miroir",
+        body: `
+          <p>Quand tu te regardes dans un miroir…</p>
+          <p><b>quel est le premier mot qui te vient ?</b></p>
+        `,
+        input: { type: "text", id: "q1", placeholder: "Un mot…" }
+      },
+      {
+        title: "Étape 2 — Le souvenir",
+        body: `
+          <p>Sans trop réfléchir :</p>
+          <p><b>quel est le premier souvenir que tu associes à nous deux ?</b></p>
+        `,
+        input: { type: "textarea", id: "q2", placeholder: "Une phrase ou deux…" }
+      },
+      {
+        title: "Étape 3 — Le présent",
+        body: `
+          <p>Là, maintenant :</p>
+          <p><b>qu’est-ce que tu ressens ?</b></p>
+        `,
+        input: { type: "text", id: "q3", placeholder: "Un mot, une émotion…" }
+      },
+      {
+        title: "Étape finale",
+        body: `
+          <div class="final">
+            <p class="big">
+              Merci d’avoir joué, <b>Amy</b>.<br/>
+              En vrai… ce n’était pas un jeu.<br/>
+              C’était juste <b>${CONFIG.yourName}</b> qui te parle avec le cœur.
+            </p>
+            <h2>${CONFIG.finalLine} 💘</h2>
+            <p class="small">Choisis avec ton cœur.</p>
+            <div class="row" style="justify-content:center; margin-top:10px">
+              <button class="yes" id="yesBtn" type="button">Oui ❤️</button>
+              <button class="ghost" id="noBtn" type="button">Non 🙃</button>
+            </div>
+            <p id="finalMsg" class="big hidden"></p>
+          </div>
+        `,
+        input: null,
+        isFinal: true
+      }
+    ];
+
+    let idx = 0;
+    const answers = {};
+    const content = document.getElementById("content");
+    const nextBtn = document.getElementById("nextBtn");
+    const backBtn = document.getElementById("backBtn");
+    const counter = document.getElementById("counter");
+    const bar = document.getElementById("bar");
+    const hint = document.getElementById("hint");
+    const hearts = document.getElementById("hearts");
+
+    function setProgress() {
+      counter.textContent = `Étape ${Math.min(idx+1, steps.length)} / ${steps.length}`;
+      const pct = (idx) / (steps.length - 1) * 100;
+      bar.style.width = `${pct}%`;
+      backBtn.style.visibility = idx === 0 ? "hidden" : "visible";
+      nextBtn.style.display = steps[idx].isFinal ? "none" : "inline-block";
+      hint.textContent = steps[idx].isFinal ? "💘" : "Astuce : lis lentement. Je suis derrière chaque mot. ✨";
+    }
+
+    function render() {
+      const step = steps[idx];
+      setProgress();
+      content.innerHTML = `
+        <div class="stepTitle">${step.title}</div>
+        ${step.body}
+        ${step.input ? renderInput(step.input) : ""}
+      `;
+
+      if (step.input) {
+        const el = document.getElementById(step.input.id);
+        if (answers[step.input.id]) el.value = answers[step.input.id];
+        el.focus({preventScroll:true});
+      }
+
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+      if (yesBtn && noBtn) {
+        yesBtn.addEventListener("click", () => {
+          celebrate();
+          showFinal(CONFIG.yesResponse);
+        }, { once:true });
+        noBtn.addEventListener("click", () => showFinal(CONFIG.noResponse), { once:true });
+      }
+    }
+
+    function renderInput(inp) {
+      if (inp.type === "textarea") {
+        return `<textarea id="${inp.id}" placeholder="${inp.placeholder}"></textarea>`;
+      }
+      return `<input id="${inp.id}" type="${inp.type}" placeholder="${inp.placeholder}" />`;
+    }
+
+    function saveInput() {
+      const step = steps[idx];
+      if (!step.input) return true;
+      const el = document.getElementById(step.input.id);
+      const value = (el.value || "").trim();
+      if (!value) {
+        el.focus();
+        el.style.borderColor = "rgba(255,77,125,.8)";
+        setTimeout(() => el.style.borderColor = "rgba(255,255,255,.10)", 650);
+        return false;
+      }
+      answers[step.input.id] = value;
+      return true;
+    }
+
+    function showFinal(msg) {
+      const finalMsg = document.getElementById("finalMsg");
+      if (!finalMsg) return;
+      finalMsg.classList.remove("hidden");
+      finalMsg.textContent = msg;
+    }
+
+    function celebrate() {
+      const emojis = ["💗","💘","💞","❤️","💕","💖","✨"];
+      let count = 0;
+      const timer = setInterval(() => {
+        for (let i=0;i<6;i++){
+          const s = document.createElement("div");
+          s.className = "heart";
+          s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+          s.style.left = Math.random()*100 + "vw";
+          s.style.animationDuration = (2.2 + Math.random()*1.6) + "s";
+          s.style.fontSize = (16 + Math.random()*18) + "px";
+          hearts.appendChild(s);
+          setTimeout(()=> s.remove(), 3200);
+        }
+        count++;
+        if (count > 14) clearInterval(timer);
+      }, 120);
+    }
+
+    nextBtn.addEventListener("click", () => {
+      if (!saveInput()) return;
+      idx = Math.min(idx + 1, steps.length - 1);
+      render();
+    });
+
+    backBtn.addEventListener("click", () => {
+      idx = Math.max(idx - 1, 0);
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
