@@ -3,275 +3,317 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Un petit jeu pour toi 💘</title>
+  <title>Amy 🌊</title>
   <style>
-    :root { --bg:#0b0b10; --card:#12121a; --text:#f3f3f7; --muted:#b8b8c7; --accent:#ff4d7d; --ok:#4dffb5; }
+    :root{
+      --deep:#062533;     /* mer profonde */
+      --sea:#0b3a4d;      /* bleu océan */
+      --foam:#bfe7e6;     /* écume */
+      --sand:#f2e2c4;     /* sable */
+      --sand2:#e7d3ab;    /* sable chaud */
+      --text:#f6fbfb;
+      --muted:rgba(246,251,251,.75);
+      --line:rgba(255,255,255,.12);
+      --accent:#ffd089;   /* soleil doux */
+      --accent2:#7ee0d6;  /* turquoise */
+    }
+
     *{box-sizing:border-box}
     body{
-      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 700px at 20% 10%, #2a1230 0%, transparent 55%),
-                  radial-gradient(900px 600px at 80% 20%, #0f2a3a 0%, transparent 55%),
-                  var(--bg);
-      color:var(--text); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+      margin:0;
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(126,224,214,.22) 0%, transparent 55%),
+        radial-gradient(900px 650px at 80% 15%, rgba(255,208,137,.20) 0%, transparent 58%),
+        linear-gradient(180deg, var(--deep) 0%, var(--sea) 42%, #0a2f40 100%);
+      overflow:hidden;
     }
-    .wrap{width:min(720px, 100%)}
+
+    /* vagues très subtiles */
+    .waves{
+      position:fixed; inset:-20vh -20vw;
+      background:
+        radial-gradient(1200px 250px at 20% 70%, rgba(191,231,230,.12), transparent 60%),
+        radial-gradient(1100px 260px at 70% 78%, rgba(191,231,230,.10), transparent 62%),
+        radial-gradient(900px 220px at 40% 86%, rgba(191,231,230,.08), transparent 60%);
+      filter: blur(2px);
+      pointer-events:none;
+      opacity:.9;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    @keyframes drift{
+      from{transform: translate3d(-10px, 0, 0) scale(1.01)}
+      to{transform: translate3d(10px, 8px, 0) scale(1.03)}
+    }
+
+    .wrap{width:min(820px, 100%)}
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:18px;
-      padding:22px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.45);
-      backdrop-filter: blur(8px);
+      position:relative;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:28px 24px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      box-shadow: 0 30px 90px rgba(0,0,0,.45);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
     }
-    .top{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:10px;}
-    .badge{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted);}
-    h1{margin:6px 0 2px; font-size:24px}
-    p{margin:10px 0; color:var(--muted); line-height:1.5}
-    .stepTitle{font-size:16px; color:var(--text); margin:14px 0 6px}
-    .progress{
-      height:8px; border-radius:999px; background: rgba(255,255,255,.08); overflow:hidden; margin:14px 0 8px;
+
+    /* bande sable en bas de la carte */
+    .sandbar{
+      position:absolute; left:-10%; right:-10%; bottom:-30%;
+      height:55%;
+      background:
+        radial-gradient(1200px 400px at 50% 20%, rgba(255,255,255,.10), transparent 60%),
+        linear-gradient(180deg, rgba(242,226,196,.92), rgba(231,211,171,.92));
+      transform: rotate(-2deg);
+      filter: blur(.0px);
+      opacity:.92;
     }
-    .bar{height:100%; width:0%; background: linear-gradient(90deg, var(--accent), #ffb84d); border-radius:999px; transition:width .35s ease;}
-    .row{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
-    input, textarea{
-      width:100%; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10);
-      color:var(--text); border-radius:12px; padding:12px 12px; outline:none;
-      font-size:15px;
+    .card > *{position:relative; z-index:2}
+
+    .badge{
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      color:rgba(246,251,251,.70);
+      margin-bottom:10px;
     }
-    textarea{min-height:90px; resize:vertical}
+
+    h1{
+      margin:0 0 10px;
+      font-weight:600;
+      font-size:28px;
+      line-height:1.18;
+    }
+
+    p{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.55;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .question{
+      margin-top:18px;
+      padding:16px 16px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      background: rgba(6,37,51,.22);
+    }
+
+    .qline{
+      font-size:18px;
+      color:rgba(246,251,251,.92);
+      margin:0;
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      margin-top:16px;
+      flex-wrap:wrap;
+    }
+
     button{
-      appearance:none; border:0; border-radius:12px; padding:12px 14px;
-      color:#0b0b10; background: var(--accent); font-weight:700; cursor:pointer;
-      transition: transform .08s ease, filter .2s ease;
+      appearance:none;
+      border:0;
+      border-radius:14px;
+      padding:12px 14px;
+      cursor:pointer;
+      font-weight:700;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      transition: transform .08s ease, filter .2s ease, background .2s ease;
     }
-    button:hover{filter:brightness(1.08)}
     button:active{transform: translateY(1px)}
-    .ghost{
-      background: transparent; color: var(--text);
-      border:1px solid rgba(255,255,255,.14);
-      font-weight:650;
+    .btn-yes{
+      background: linear-gradient(135deg, var(--accent), #ffe3b3);
+      color:#062533;
     }
-    .yes{background: var(--ok)}
-    .small{font-size:12px; color:rgba(255,255,255,.55); margin-top:10px}
-    .divider{height:1px; background:rgba(255,255,255,.08); margin:16px 0}
-    .hearts{ position:fixed; inset:0; pointer-events:none; overflow:hidden; }
+    .btn-no{
+      background: rgba(255,255,255,.08);
+      color: rgba(246,251,251,.92);
+      border: 1px solid rgba(255,255,255,.16);
+    }
+    .btn-next{
+      background: linear-gradient(135deg, var(--accent2), #c9f6f1);
+      color:#062533;
+    }
+
+    .note{
+      margin-top:10px;
+      font-size:13px;
+      color:rgba(246,251,251,.65);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      min-height:18px;
+    }
+
+    .hidden{display:none}
+
+    /* petit “shake” quand elle met Non */
+    .shake{
+      animation: shake .35s ease;
+    }
+    @keyframes shake{
+      0%{transform: translateX(0)}
+      25%{transform: translateX(-6px)}
+      50%{transform: translateX(6px)}
+      75%{transform: translateX(-4px)}
+      100%{transform: translateX(0)}
+    }
+
+    /* confettis cœur (léger) */
+    .hearts{
+      position:fixed; inset:0; pointer-events:none; overflow:hidden;
+    }
     .heart{
-      position:absolute; bottom:-40px; font-size:18px; opacity:.0;
-      animation: floatUp 2.8s linear infinite;
-      filter: drop-shadow(0 10px 18px rgba(0,0,0,.4));
+      position:absolute; bottom:-40px;
+      animation: floatUp 2.6s linear forwards;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
+      opacity:0;
     }
     @keyframes floatUp{
       0%{transform: translateY(0) scale(.9); opacity:0}
-      10%{opacity:.9}
-      100%{transform: translateY(-110vh) scale(1.2); opacity:0}
+      12%{opacity:.95}
+      100%{transform: translateY(-110vh) scale(1.18); opacity:0}
     }
-    .final{text-align:center;}
-    .final h2{margin:6px 0 0; font-size:26px}
-    .final .big{font-size:18px; color:var(--text); margin-top:10px}
-    .hidden{display:none}
+
+    .signature{
+      margin-top:18px;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      color:rgba(246,251,251,.70);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size:13px;
+    }
+    .sig-strong{color:rgba(246,251,251,.92)}
   </style>
 </head>
+
 <body>
+  <div class="waves" aria-hidden="true"></div>
   <div class="hearts" id="hearts" aria-hidden="true"></div>
 
   <div class="wrap">
-    <div class="card">
-      <div class="top">
-        <div>
-          <div class="badge">Jeu de piste • pour Amy</div>
-          <h1>Mon bébé d’amour… j’ai un petit truc pour toi 💘</h1>
+    <div class="card" id="card">
+      <div class="sandbar" aria-hidden="true"></div>
+
+      <!-- ÉCRAN 1 -->
+      <section id="screen1">
+        <div class="badge">🌊 Mer • Sable • Nous deux</div>
+        <h1>Amy, mon bébé d’amour</h1>
+        <p>
+          J’ai fait ce petit coin de calme, comme une plage à nous,
+          juste pour te poser une question.
+        </p>
+
+        <div class="question">
+          <p class="qline"><b>Te rappelles-tu de notre re-rencontre ?</b></p>
+          <div class="actions">
+            <button class="btn-yes" id="yes1" type="button">Oui</button>
+            <button class="btn-no" id="no1" type="button">Non</button>
+          </div>
+          <div class="note" id="note1"></div>
         </div>
-        <div class="badge" id="counter">Étape 1 / 5</div>
-      </div>
 
-      <div class="progress"><div class="bar" id="bar"></div></div>
+        <div class="signature">
+          <div>De <span class="sig-strong">Eric</span> aka <span class="sig-strong">Chouuu</span></div>
+          <div>Pour <span class="sig-strong">Amy</span> aka <span class="sig-strong">mon bébé d’amour</span></div>
+        </div>
+      </section>
 
-      <div id="content"></div>
+      <!-- ÉCRAN 2 -->
+      <section id="screen2" class="hidden">
+        <div class="badge">✨ 14 février</div>
+        <h1>Alors, pour ce nouveau 14 février…</h1>
+        <p>
+          je voudrais te <b>re-re-rencontrer</b>
+          en te demandant quelque chose, tout simplement.
+        </p>
 
-      <div class="divider"></div>
+        <div class="question">
+          <p class="qline" style="font-size:20px">
+            <b>Amy… est-ce que tu veux être ma Valentine ?</b> 💘
+          </p>
+          <div class="actions">
+            <button class="btn-next" id="yes2" type="button">Être ta Valentine 💞</button>
+          </div>
+          <div class="note" id="note2"></div>
+        </div>
 
-      <div class="row">
-        <button class="ghost" id="backBtn" type="button">Retour</button>
-        <button id="nextBtn" type="button">Continuer</button>
-      </div>
-
-      <div class="small" id="hint">Astuce : lis lentement. Je suis derrière chaque mot. ✨</div>
+        <div class="signature">
+          <div>— <span class="sig-strong">Chouuu</span></div>
+          <div style="opacity:.85">🌊 + 🏖️ + ❤️</div>
+        </div>
+      </section>
     </div>
   </div>
 
   <script>
-    // ✅ Personnalisation
-    const CONFIG = {
-      herName: "Amy (mon bébé d’amour)",
-      yourName: "Eric (Chouuu)",
-      finalLine: "Amy… est-ce que tu veux être ma Valentine ?",
-      yesResponse: "AAAAH OUI 😭💞 Viens, je te prends dans mes bras. — Chouuu",
-      noResponse: "Ok… mais je t’aime quand même fort. (Et je retente demain 😌💘) — Chouuu"
-    };
-
-    const steps = [
-      {
-        title: "Avant de commencer",
-        body: `
-          <p>Salut <b>${CONFIG.herName}</b> 🙂</p>
-          <p>J’ai préparé un petit jeu rien que pour toi.</p>
-          <p><b>Règle :</b> avance étape par étape. Réponds sincèrement, sans te presser.</p>
-          <p class="small">Quand tu es prête, clique sur <b>Continuer</b>.</p>
-        `,
-        input: null
-      },
-      {
-        title: "Étape 1 — Le miroir",
-        body: `
-          <p>Quand tu te regardes dans un miroir…</p>
-          <p><b>quel est le premier mot qui te vient ?</b></p>
-        `,
-        input: { type: "text", id: "q1", placeholder: "Un mot…" }
-      },
-      {
-        title: "Étape 2 — Le souvenir",
-        body: `
-          <p>Sans trop réfléchir :</p>
-          <p><b>quel est le premier souvenir que tu associes à nous deux ?</b></p>
-        `,
-        input: { type: "textarea", id: "q2", placeholder: "Une phrase ou deux…" }
-      },
-      {
-        title: "Étape 3 — Le présent",
-        body: `
-          <p>Là, maintenant :</p>
-          <p><b>qu’est-ce que tu ressens ?</b></p>
-        `,
-        input: { type: "text", id: "q3", placeholder: "Un mot, une émotion…" }
-      },
-      {
-        title: "Étape finale",
-        body: `
-          <div class="final">
-            <p class="big">
-              Merci d’avoir joué, <b>Amy</b>.<br/>
-              En vrai… ce n’était pas un jeu.<br/>
-              C’était juste <b>${CONFIG.yourName}</b> qui te parle avec le cœur.
-            </p>
-            <h2>${CONFIG.finalLine} 💘</h2>
-            <p class="small">Choisis avec ton cœur.</p>
-            <div class="row" style="justify-content:center; margin-top:10px">
-              <button class="yes" id="yesBtn" type="button">Oui ❤️</button>
-              <button class="ghost" id="noBtn" type="button">Non 🙃</button>
-            </div>
-            <p id="finalMsg" class="big hidden"></p>
-          </div>
-        `,
-        input: null,
-        isFinal: true
-      }
-    ];
-
-    let idx = 0;
-    const answers = {};
-    const content = document.getElementById("content");
-    const nextBtn = document.getElementById("nextBtn");
-    const backBtn = document.getElementById("backBtn");
-    const counter = document.getElementById("counter");
-    const bar = document.getElementById("bar");
-    const hint = document.getElementById("hint");
+    const card = document.getElementById("card");
+    const screen1 = document.getElementById("screen1");
+    const screen2 = document.getElementById("screen2");
+    const note1 = document.getElementById("note1");
+    const note2 = document.getElementById("note2");
     const hearts = document.getElementById("hearts");
 
-    function setProgress() {
-      counter.textContent = `Étape ${Math.min(idx+1, steps.length)} / ${steps.length}`;
-      const pct = (idx) / (steps.length - 1) * 100;
-      bar.style.width = `${pct}%`;
-      backBtn.style.visibility = idx === 0 ? "hidden" : "visible";
-      nextBtn.style.display = steps[idx].isFinal ? "none" : "inline-block";
-      hint.textContent = steps[idx].isFinal ? "💘" : "Astuce : lis lentement. Je suis derrière chaque mot. ✨";
+    const yes1 = document.getElementById("yes1");
+    const no1  = document.getElementById("no1");
+    const yes2 = document.getElementById("yes2");
+
+    function shake(){
+      card.classList.remove("shake");
+      // reflow
+      void card.offsetWidth;
+      card.classList.add("shake");
     }
 
-    function render() {
-      const step = steps[idx];
-      setProgress();
-      content.innerHTML = `
-        <div class="stepTitle">${step.title}</div>
-        ${step.body}
-        ${step.input ? renderInput(step.input) : ""}
-      `;
-
-      if (step.input) {
-        const el = document.getElementById(step.input.id);
-        if (answers[step.input.id]) el.value = answers[step.input.id];
-        el.focus({preventScroll:true});
-      }
-
-      const yesBtn = document.getElementById("yesBtn");
-      const noBtn = document.getElementById("noBtn");
-      if (yesBtn && noBtn) {
-        yesBtn.addEventListener("click", () => {
-          celebrate();
-          showFinal(CONFIG.yesResponse);
-        }, { once:true });
-        noBtn.addEventListener("click", () => showFinal(CONFIG.noResponse), { once:true });
+    function spawnHearts(){
+      const emojis = ["💗","💘","💞","❤️","💕","✨"];
+      for(let i=0;i<18;i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        h.style.left = (Math.random()*100) + "vw";
+        h.style.fontSize = (16 + Math.random()*18) + "px";
+        h.style.animationDuration = (2.0 + Math.random()*1.3) + "s";
+        h.style.opacity = "0";
+        hearts.appendChild(h);
+        setTimeout(()=>h.remove(), 3200);
       }
     }
 
-    function renderInput(inp) {
-      if (inp.type === "textarea") {
-        return `<textarea id="${inp.id}" placeholder="${inp.placeholder}"></textarea>`;
-      }
-      return `<input id="${inp.id}" type="${inp.type}" placeholder="${inp.placeholder}" />`;
-    }
-
-    function saveInput() {
-      const step = steps[idx];
-      if (!step.input) return true;
-      const el = document.getElementById(step.input.id);
-      const value = (el.value || "").trim();
-      if (!value) {
-        el.focus();
-        el.style.borderColor = "rgba(255,77,125,.8)";
-        setTimeout(() => el.style.borderColor = "rgba(255,255,255,.10)", 650);
-        return false;
-      }
-      answers[step.input.id] = value;
-      return true;
-    }
-
-    function showFinal(msg) {
-      const finalMsg = document.getElementById("finalMsg");
-      if (!finalMsg) return;
-      finalMsg.classList.remove("hidden");
-      finalMsg.textContent = msg;
-    }
-
-    function celebrate() {
-      const emojis = ["💗","💘","💞","❤️","💕","💖","✨"];
-      let count = 0;
-      const timer = setInterval(() => {
-        for (let i=0;i<6;i++){
-          const s = document.createElement("div");
-          s.className = "heart";
-          s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-          s.style.left = Math.random()*100 + "vw";
-          s.style.animationDuration = (2.2 + Math.random()*1.6) + "s";
-          s.style.fontSize = (16 + Math.random()*18) + "px";
-          hearts.appendChild(s);
-          setTimeout(()=> s.remove(), 3200);
-        }
-        count++;
-        if (count > 14) clearInterval(timer);
-      }, 120);
-    }
-
-    nextBtn.addEventListener("click", () => {
-      if (!saveInput()) return;
-      idx = Math.min(idx + 1, steps.length - 1);
-      render();
+    no1.addEventListener("click", () => {
+      shake();
+      note1.textContent = "Hmm… réfléchis encore 😌 (tu peux pas dire non là)";
     });
 
-    backBtn.addEventListener("click", () => {
-      idx = Math.max(idx - 1, 0);
-      render();
+    yes1.addEventListener("click", () => {
+      // passer à l'écran 2
+      screen1.classList.add("hidden");
+      screen2.classList.remove("hidden");
+      note2.textContent = "";
+      window.scrollTo({top:0, behavior:"smooth"});
     });
 
-    render();
+    yes2.addEventListener("click", () => {
+      note2.textContent = "Je savais. Viens, on se re-re-rencontre pour de vrai. 💞 — Chouuu";
+      spawnHearts();
+    });
   </script>
 </body>
 </html>
