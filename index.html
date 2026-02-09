@@ -1,319 +1,251 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Amy 🌊</title>
-  <style>
-    :root{
-      --deep:#062533;     /* mer profonde */
-      --sea:#0b3a4d;      /* bleu océan */
-      --foam:#bfe7e6;     /* écume */
-      --sand:#f2e2c4;     /* sable */
-      --sand2:#e7d3ab;    /* sable chaud */
-      --text:#f6fbfb;
-      --muted:rgba(246,251,251,.75);
-      --line:rgba(255,255,255,.12);
-      --accent:#ffd089;   /* soleil doux */
-      --accent2:#7ee0d6;  /* turquoise */
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amy 🌊</title>
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
-      color:var(--text);
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
-      background:
-        radial-gradient(900px 600px at 20% 10%, rgba(126,224,214,.22) 0%, transparent 55%),
-        radial-gradient(900px 650px at 80% 15%, rgba(255,208,137,.20) 0%, transparent 58%),
-        linear-gradient(180deg, var(--deep) 0%, var(--sea) 42%, #0a2f40 100%);
-      overflow:hidden;
-    }
+<style>
+:root{
+  --deep:#062533;
+  --sea:#0b3a4d;
+  --text:#f6fbfb;
+  --muted:rgba(246,251,251,.85);
+  --accent:#ffd089;
+  --line:rgba(255,255,255,.15);
+}
 
-    /* vagues très subtiles */
-    .waves{
-      position:fixed; inset:-20vh -20vw;
-      background:
-        radial-gradient(1200px 250px at 20% 70%, rgba(191,231,230,.12), transparent 60%),
-        radial-gradient(1100px 260px at 70% 78%, rgba(191,231,230,.10), transparent 62%),
-        radial-gradient(900px 220px at 40% 86%, rgba(191,231,230,.08), transparent 60%);
-      filter: blur(2px);
-      pointer-events:none;
-      opacity:.9;
-      animation: drift 12s ease-in-out infinite alternate;
-    }
-    @keyframes drift{
-      from{transform: translate3d(-10px, 0, 0) scale(1.01)}
-      to{transform: translate3d(10px, 8px, 0) scale(1.03)}
-    }
+*{box-sizing:border-box}
 
-    .wrap{width:min(820px, 100%)}
-    .card{
-      position:relative;
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:28px 24px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
-      box-shadow: 0 30px 90px rgba(0,0,0,.45);
-      backdrop-filter: blur(10px);
-      overflow:hidden;
-    }
+body{
+  margin:0;
+  font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+  background:
+    radial-gradient(900px 600px at 20% 10%, rgba(126,224,214,.18), transparent 55%),
+    radial-gradient(900px 650px at 80% 15%, rgba(255,208,137,.18), transparent 58%),
+    linear-gradient(180deg, var(--deep), var(--sea));
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:22px;
+}
 
-    /* bande sable en bas de la carte */
-    .sandbar{
-      position:absolute; left:-10%; right:-10%; bottom:-30%;
-      height:55%;
-      background:
-        radial-gradient(1200px 400px at 50% 20%, rgba(255,255,255,.10), transparent 60%),
-        linear-gradient(180deg, rgba(242,226,196,.92), rgba(231,211,171,.92));
-      transform: rotate(-2deg);
-      filter: blur(.0px);
-      opacity:.92;
-    }
-    .card > *{position:relative; z-index:2}
+section{
+  width:100%;
+  max-width:860px;
+  text-align:center;
+  padding:30px 22px;
+  border-radius:22px;
+  border:1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+  box-shadow: 0 26px 90px rgba(0,0,0,.45);
+  backdrop-filter: blur(10px);
+}
 
-    .badge{
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      font-size:12px;
-      color:rgba(246,251,251,.70);
-      margin-bottom:10px;
-    }
+h1{
+  font-size:30px;
+  margin:0 0 12px;
+  font-weight:600;
+}
 
-    h1{
-      margin:0 0 10px;
-      font-weight:600;
-      font-size:28px;
-      line-height:1.18;
-    }
+p{
+  font-size:18px;
+  line-height:1.6;
+  margin:0 0 14px;
+  color:var(--muted);
+}
 
-    p{
-      margin:0 0 14px;
-      color:var(--muted);
-      font-size:17px;
-      line-height:1.55;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
+.actions{margin-top:12px}
 
-    .question{
-      margin-top:18px;
-      padding:16px 16px;
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:16px;
-      background: rgba(6,37,51,.22);
-    }
+button{
+  margin:10px 8px;
+  padding:14px 24px;
+  border-radius:999px;
+  border:none;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  transition: transform .1s ease, filter .2s ease;
+}
 
-    .qline{
-      font-size:18px;
-      color:rgba(246,251,251,.92);
-      margin:0;
-      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
-    }
+button:active{transform: translateY(1px)}
 
-    .actions{
-      display:flex;
-      gap:12px;
-      margin-top:16px;
-      flex-wrap:wrap;
-    }
+.yes{
+  background:var(--accent);
+  color:#062533;
+}
 
-    button{
-      appearance:none;
-      border:0;
-      border-radius:14px;
-      padding:12px 14px;
-      cursor:pointer;
-      font-weight:700;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      transition: transform .08s ease, filter .2s ease, background .2s ease;
-    }
-    button:active{transform: translateY(1px)}
-    .btn-yes{
-      background: linear-gradient(135deg, var(--accent), #ffe3b3);
-      color:#062533;
-    }
-    .btn-no{
-      background: rgba(255,255,255,.08);
-      color: rgba(246,251,251,.92);
-      border: 1px solid rgba(255,255,255,.16);
-    }
-    .btn-next{
-      background: linear-gradient(135deg, var(--accent2), #c9f6f1);
-      color:#062533;
-    }
+.no{
+  background:rgba(255,255,255,.14);
+  color:white;
+  border:1px solid rgba(255,255,255,.18);
+}
 
-    .note{
-      margin-top:10px;
-      font-size:13px;
-      color:rgba(246,251,251,.65);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      min-height:18px;
-    }
+.hidden{display:none}
 
-    .hidden{display:none}
+#hint{
+  margin-top:6px;
+  font-size:14px;
+  color:rgba(246,251,251,.75);
+}
 
-    /* petit “shake” quand elle met Non */
-    .shake{
-      animation: shake .35s ease;
-    }
-    @keyframes shake{
-      0%{transform: translateX(0)}
-      25%{transform: translateX(-6px)}
-      50%{transform: translateX(6px)}
-      75%{transform: translateX(-4px)}
-      100%{transform: translateX(0)}
-    }
+/* ÉCRAN PHRASE */
+#quote{
+  padding:40px 24px;
+}
 
-    /* confettis cœur (léger) */
-    .hearts{
-      position:fixed; inset:0; pointer-events:none; overflow:hidden;
-    }
-    .heart{
-      position:absolute; bottom:-40px;
-      animation: floatUp 2.6s linear forwards;
-      filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
-      opacity:0;
-    }
-    @keyframes floatUp{
-      0%{transform: translateY(0) scale(.9); opacity:0}
-      12%{opacity:.95}
-      100%{transform: translateY(-110vh) scale(1.18); opacity:0}
-    }
+#quote p{
+  font-size:22px;
+  max-width:720px;
+  margin:auto;
+  animation: fadeIn 1.3s ease forwards;
+}
 
-    .signature{
-      margin-top:18px;
-      padding-top:14px;
-      border-top:1px solid rgba(255,255,255,.10);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      color:rgba(246,251,251,.70);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-size:13px;
-    }
-    .sig-strong{color:rgba(246,251,251,.92)}
-  </style>
+@keyframes fadeIn{
+  from{opacity:0; transform: translateY(6px)}
+  to{opacity:1; transform: translateY(0)}
+}
+
+/* SLIDESHOW */
+#slideshow{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(900px 650px at 50% 10%, rgba(255,208,137,.12), transparent 60%),
+    #000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:50;
+}
+
+#slideshow img{
+  width:min(92vw, 920px);
+  height:min(92vh, 920px);
+  object-fit:contain;
+  border-radius:18px;
+  box-shadow:0 30px 120px rgba(0,0,0,.65);
+  opacity:0;
+  transition:opacity 1.1s ease;
+}
+
+#slideshow img.show{opacity:1}
+</style>
 </head>
 
 <body>
-  <div class="waves" aria-hidden="true"></div>
-  <div class="hearts" id="hearts" aria-hidden="true"></div>
 
-  <div class="wrap">
-    <div class="card" id="card">
-      <div class="sandbar" aria-hidden="true"></div>
+<!-- ÉCRAN 1 : QUESTION -->
+<section id="q1">
+  <h1>Amy, mon bébé d’amour</h1>
+  <p>Te rappelles-tu de notre re-rencontre&nbsp;?</p>
 
-      <!-- ÉCRAN 1 -->
-      <section id="screen1">
-        <div class="badge">🌊 Mer • Sable • Nous deux</div>
-        <h1>Amy, mon bébé d’amour</h1>
-        <p>
-          J’ai fait ce petit coin de calme, comme une plage à nous,
-          juste pour te poser une question.
-        </p>
-
-        <div class="question">
-          <p class="qline"><b>Te rappelles-tu de notre re-rencontre ?</b></p>
-          <div class="actions">
-            <button class="btn-yes" id="yes1" type="button">Oui</button>
-            <button class="btn-no" id="no1" type="button">Non</button>
-          </div>
-          <div class="note" id="note1"></div>
-        </div>
-
-        <div class="signature">
-          <div>De <span class="sig-strong">Eric</span> aka <span class="sig-strong">Chouuu</span></div>
-          <div>Pour <span class="sig-strong">Amy</span> aka <span class="sig-strong">mon bébé d’amour</span></div>
-        </div>
-      </section>
-
-      <!-- ÉCRAN 2 -->
-      <section id="screen2" class="hidden">
-        <div class="badge">✨ 14 février</div>
-        <h1>Alors, pour ce nouveau 14 février…</h1>
-        <p>
-          je voudrais te <b>re-re-rencontrer</b>
-          en te demandant quelque chose, tout simplement.
-        </p>
-
-        <div class="question">
-          <p class="qline" style="font-size:20px">
-            <b>Amy… est-ce que tu veux être ma Valentine ?</b> 💘
-          </p>
-          <div class="actions">
-            <button class="btn-next" id="yes2" type="button">Être ta Valentine 💞</button>
-          </div>
-          <div class="note" id="note2"></div>
-        </div>
-
-        <div class="signature">
-          <div>— <span class="sig-strong">Chouuu</span></div>
-          <div style="opacity:.85">🌊 + 🏖️ + ❤️</div>
-        </div>
-      </section>
-    </div>
+  <div class="actions">
+    <button class="yes" id="yes1">Oui</button>
+    <button class="no" id="no1">Non</button>
   </div>
 
-  <script>
-    const card = document.getElementById("card");
-    const screen1 = document.getElementById("screen1");
-    const screen2 = document.getElementById("screen2");
-    const note1 = document.getElementById("note1");
-    const note2 = document.getElementById("note2");
-    const hearts = document.getElementById("hearts");
+  <div id="hint"></div>
+</section>
 
-    const yes1 = document.getElementById("yes1");
-    const no1  = document.getElementById("no1");
-    const yes2 = document.getElementById("yes2");
+<!-- ÉCRAN PHRASE -->
+<section id="quote" class="hidden">
+  <p>
+    « Et si tous les gens de cette terre se ressemblent,<br>
+    <b>tu es celle qui donne sens au mot unique.</b> »
+  </p>
+</section>
 
-    function shake(){
-      card.classList.remove("shake");
-      // reflow
-      void card.offsetWidth;
-      card.classList.add("shake");
+<!-- SLIDESHOW -->
+<div id="slideshow" class="hidden">
+  <img id="slide" src="" alt="Souvenir">
+</div>
+
+<!-- ÉCRAN VALENTINE -->
+<section id="q2" class="hidden">
+  <h1>Alors, pour ce nouveau 14 février…</h1>
+  <p>je voudrais te re-re-rencontrer en te demandant</p>
+  <h1>💙 d’être ma Valentine 💙</h1>
+
+  <div class="actions">
+    <button class="yes" onclick="openSong()">Oui ❤️</button>
+  </div>
+</section>
+
+<script>
+// ⚠️ Les photos doivent être dans /photos/
+// photo1.jpg à photo10.jpg
+const photos = [
+  "photos/photo1.jpg",
+  "photos/photo2.jpg",
+  "photos/photo3.jpg",
+  "photos/photo4.jpg",
+  "photos/photo5.jpg",
+  "photos/photo6.jpg",
+  "photos/photo7.jpg",
+  "photos/photo8.jpg",
+  "photos/photo9.jpg",
+  "photos/photo10.jpg"
+];
+
+let index = 0;
+
+const q1 = document.getElementById("q1");
+const quote = document.getElementById("quote");
+const q2 = document.getElementById("q2");
+const hint = document.getElementById("hint");
+const slideshow = document.getElementById("slideshow");
+const slide = document.getElementById("slide");
+
+document.getElementById("no1").onclick = () => {
+  hint.textContent = "Hmm… réfléchis encore 😌";
+};
+
+document.getElementById("yes1").onclick = () => {
+  q1.classList.add("hidden");
+  quote.classList.remove("hidden");
+
+  setTimeout(() => {
+    quote.classList.add("hidden");
+    slideshow.classList.remove("hidden");
+    index = 0;
+    playSlideshow();
+  }, 3200);
+};
+
+function playSlideshow(){
+  slide.classList.remove("show");
+  slide.src = photos[index];
+
+  slide.onload = () => {
+    setTimeout(() => slide.classList.add("show"), 80);
+  };
+
+  setTimeout(() => {
+    slide.classList.remove("show");
+    index++;
+
+    if(index < photos.length){
+      setTimeout(playSlideshow, 600);
+    } else {
+      setTimeout(() => {
+        slideshow.classList.add("hidden");
+        q2.classList.remove("hidden");
+        window.scrollTo({top:0, behavior:"smooth"});
+      }, 700);
     }
+  }, 2800);
+}
 
-    function spawnHearts(){
-      const emojis = ["💗","💘","💞","❤️","💕","✨"];
-      for(let i=0;i<18;i++){
-        const h = document.createElement("div");
-        h.className = "heart";
-        h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-        h.style.left = (Math.random()*100) + "vw";
-        h.style.fontSize = (16 + Math.random()*18) + "px";
-        h.style.animationDuration = (2.0 + Math.random()*1.3) + "s";
-        h.style.opacity = "0";
-        hearts.appendChild(h);
-        setTimeout(()=>h.remove(), 3200);
-      }
-    }
+function openSong(){
+  window.open(
+    "https://open.spotify.com/track/3j3bZ6o2g4GZL0cO8jO5zW",
+    "_blank"
+  );
+}
+</script>
 
-    no1.addEventListener("click", () => {
-      shake();
-      note1.textContent = "Hmm… réfléchis encore 😌 (tu peux pas dire non là)";
-    });
-
-    yes1.addEventListener("click", () => {
-      // passer à l'écran 2
-      screen1.classList.add("hidden");
-      screen2.classList.remove("hidden");
-      note2.textContent = "";
-      window.scrollTo({top:0, behavior:"smooth"});
-    });
-
-    yes2.addEventListener("click", () => {
-      note2.textContent = "Je savais. Viens, on se re-re-rencontre pour de vrai. 💞 — Chouuu";
-      spawnHearts();
-    });
-  </script>
 </body>
 </html>
